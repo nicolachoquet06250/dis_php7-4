@@ -10,9 +10,9 @@ use classes\routage\Response;
 class Test extends Controller {
     public ?\classes\services\Test $test = null;
 
-    public function __construct(\classes\services\Test $test) {
-        $this->test = $test;
-    }
+//    public function __construct(\classes\services\Test $test) {
+//        $this->test = $test;
+//    }
 
     /**
      * @param Request $req

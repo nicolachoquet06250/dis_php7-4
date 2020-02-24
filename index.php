@@ -12,14 +12,8 @@ $app = Application::create();
 Application::context(Application::CONTEXT_API);
 
 $router = Router::create()
-    ->get('/test/:toto/:tata', function (Request $req, Response $res) {
-        return $res->error(400)->json();
-    })
-    ->get('/test', function (Request $req, Response $res) {
-        echo '<pre>';
-        var_dump($req, $res);
-        echo '</pre>';
-    })
+    ->get('/test/:toto/:tata', fn (Request $req, Response $res) => $res->error(400)->json())
+    ->get('/test', fn (Request $req, Response $res) => $res->json(['success' => true]))
     ->group('/toto', \app\classes\controllers\Test::class);
 
 $app->add($router, 'route');

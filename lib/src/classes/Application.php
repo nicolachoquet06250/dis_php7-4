@@ -19,11 +19,12 @@ class Application extends Singleton {
     const CONTEXT_API = 'api';
     const CONTEXT_WEBSITE = 'website';
 
-    public function add(object $object, string $start_method) {
+    public function add(object $object, string $start_method): Application {
         $this->objects_to_start[] = [
             'object' => $object,
             'start_method' => $start_method,
         ];
+        return $this;
     }
 
     public function run() {

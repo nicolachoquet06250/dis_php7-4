@@ -5,6 +5,7 @@ namespace classes\routage;
 
 use classes\abstracts\Singleton;
 use classes\Application;
+use classes\mvc\Controller;
 use Exception;
 use ReflectionClass;
 use ReflectionException;
@@ -72,10 +73,11 @@ class Router extends Singleton {
 
     /**
      * @param ReflectionClass $classRef
-     * @return mixed
+     * @return Controller
      * @throws ReflectionException
      */
     private function inject_into_object_properties(ReflectionClass $classRef) {
+        /** @var Controller $object */
         $object = $classRef->newInstanceWithoutConstructor();
 
         foreach ($classRef->getProperties() as $property) {
@@ -136,8 +138,7 @@ class Router extends Singleton {
         } else {
             $refClass = new ReflectionClass($callback);
             $object = $this->inject_into_object_properties($refClass);
-//            $object = new $callback(...$this->create_params_to_inject_in_construct($refClass));
-//            var_dump($object);
+            $object->group_route($route);
             $this->add_methods_into_routes(new ReflectionObject($object), $object, $route);
         }
         return $this;

@@ -12,6 +12,7 @@ $app = Application::create();
 Application::context(Application::CONTEXT_API);
 
 $router = Router::create()
+    ->get('/', fn (Request $req, Response $res) => $res->json(['status' => 'HOME']))
     ->get('/test/:toto/:tata', fn (Request $req, Response $res) => $res->error(400)->json())
     ->get('/test', fn (Request $req, Response $res) => $res->json(['success' => true]))
     ->group('/toto', \app\classes\controllers\Test::class);

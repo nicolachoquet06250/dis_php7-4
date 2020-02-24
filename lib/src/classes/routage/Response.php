@@ -81,7 +81,7 @@ class Response {
         </body>
     </html>';
         }
-        return '';
+        return $_;
     }
 
     public function error(int $code, ?string $message = null): Response {

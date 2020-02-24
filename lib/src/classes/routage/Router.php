@@ -46,6 +46,11 @@ class Router extends Singleton {
         else throw new Exception(__CLASS__.'::'.$name.'() method not found !!');
     }
 
+    /**
+     * @param ReflectionClass $classRef
+     * @return array
+     * @throws ReflectionException
+     */
     private function create_params_to_inject_in_construct(ReflectionClass $classRef): array {
         $construct = $classRef->getConstructor();
         if(!is_null($construct)) {
@@ -53,21 +58,39 @@ class Router extends Singleton {
             $params = [];
             foreach ($construct_params as $construct_param) {
                 $paramClass = $construct_param->getClass()->getName();
-                $params[] = new $paramClass();
+                $parent = (new ReflectionClass($paramClass))->getParentClass();
+                if($parent && $parent->getName() === Singleton::class) {
+                    $params[] = $paramClass::create();
+                } else {
+                    $params[] = new $paramClass();
+                }
             }
             return $params;
         }
         return [];
     }
 
-    private function inject_into_object_properties(&$object) {
-        $refObject = new ReflectionObject($object);
-        foreach ($refObject->getProperties() as $property) {
+    /**
+     * @param ReflectionClass $classRef
+     * @return mixed
+     * @throws ReflectionException
+     */
+    private function inject_into_object_properties(ReflectionClass $classRef) {
+        $object = $classRef->newInstanceWithoutConstructor();
+
+        foreach ($classRef->getProperties() as $property) {
             if($property->isPublic()) {
-                $class = $property->getType()->getName();
-                $object->{$property->getName()} = new $class();
+                $_class = $property->getType()->getName();
+                $parent = (new ReflectionClass($_class))->getParentClass();
+                if($parent && $parent->getName() === Singleton::class) {
+                    $object->{$property->getName()} = $_class::create();
+                } else {
+                    $object->{$property->getName()} = new $_class();
+                }
             }
         }
+        $object->__construct(...$this->create_params_to_inject_in_construct($classRef));
+        return $object;
     }
 
     private function add_methods_into_routes(ReflectionObject $objectRef, $object, string $group_route) {
@@ -112,8 +135,9 @@ class Router extends Singleton {
             $callback($this, $route);
         } else {
             $refClass = new ReflectionClass($callback);
-            $object = new $callback(...$this->create_params_to_inject_in_construct($refClass));
-            $this->inject_into_object_properties($object);
+            $object = $this->inject_into_object_properties($refClass);
+//            $object = new $callback(...$this->create_params_to_inject_in_construct($refClass));
+//            var_dump($object);
             $this->add_methods_into_routes(new ReflectionObject($object), $object, $route);
         }
         return $this;
@@ -130,12 +154,16 @@ class Router extends Singleton {
         return $val;
     }
 
+    private function array_to_string($array) {
+        if(is_array($array)) return $this->array_to_string($array[0]);
+        else return $array;
+    }
+
     private function parse_params($matches) {
         $uri_params = [];
         foreach ($matches as $var => $val) {
             if(is_string($var) && !empty($val)) {
-                $val = $val[0];
-                if(is_array($val)) $val = $val[0];
+                $val = $this->array_to_string($val);
                 $uri_params[$var] = self::cast($val);
             }
         }

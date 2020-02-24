@@ -39,7 +39,7 @@ class Request {
             $this->get[$key] = $val;
         }
         if(isset($this->get[$key])) {
-            return $this->get[$key];
+            return $this->get[$key] === '' ? true : $this->get[$key];
         }
         return null;
     }

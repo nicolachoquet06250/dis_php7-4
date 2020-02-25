@@ -2,7 +2,6 @@
 
 namespace app\classes\services;
 
-
 class JsonParser {
     /**
      * @param array|array $test

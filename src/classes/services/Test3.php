@@ -2,7 +2,6 @@
 
 namespace app\classes\services;
 
-
 use traits\DIS;
 
 class Test3 {

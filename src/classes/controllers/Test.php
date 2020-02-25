@@ -16,7 +16,7 @@ class Test extends Controller {
     /**
      * @param Request $req
      * @param Response $res
-     * @return string
+     * @return void
      *
      * @http get
      * @route /:lol

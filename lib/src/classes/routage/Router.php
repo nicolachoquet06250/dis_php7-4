@@ -77,6 +77,14 @@ class Router {
         }
     }
 
+    private function instantiate(ReflectionClass $refClass, $callback) {
+        if($refClass->hasMethod('init')) $object = $callback::init();
+        elseif ($refClass->hasMethod('create')) $object = $callback::create();
+        else $object = new $callback();
+
+        return $object;
+    }
+
     /**
      * @param string $route
      * @param callable|Controller $callback
@@ -87,11 +95,7 @@ class Router {
         if(is_callable($callback)) $callback($this, $route);
         else {
             $refClass = new ReflectionClass($callback);
-
-            if($refClass->hasMethod('init')) $object = $callback::init();
-            elseif ($refClass->hasMethod('create')) $object = $callback::create();
-            else $object = new $callback();
-
+            $object = $this->instantiate($refClass, $callback);
             /** @var Controller $object */
             $object->group_route($route);
             $this->add_methods_into_routes(new ReflectionObject($object), $object, $route);
@@ -101,11 +105,17 @@ class Router {
 
     private static function cast($val) {
         if(is_string($val)) {
-            if(preg_match('/(true|false)$/sD', $val)) {
-                $val = $val === 'true';
-            } elseif (preg_match('/([0-9]+)$/sD', $val)) {
-                $val = intval($val);
-            }
+            // for booleans
+            if(preg_match('/(true|false)$/sD', $val)) $val = $val === 'true';
+            // for numbers
+            elseif (preg_match('/([0-9\.]+)$/sD', $val)) $val = intval($val);
+            // for arrays and objects
+            elseif (preg_match('/\[(.+)\]$/sD', $val) || preg_match('/\{(.+)\}$/sD', $val)) $val = json_decode($val, true);
+            // for null
+            elseif (preg_match('/(null|NULL)$/sD', $val)) $val = null;
+
+            // for void
+            if($val === '') $val = true;
         }
         return $val;
     }
@@ -135,7 +145,7 @@ class Router {
             $tmp = [];
             foreach ($queryStringArray as $value) {
                 $_ = explode('=', $value);
-                $tmp[$_[0]] = $_[1];
+                $tmp[$_[0]] = $this->cast(urldecode($_[1]));
             }
             $this->get = $tmp;
         }

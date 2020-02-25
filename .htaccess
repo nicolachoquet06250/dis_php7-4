@@ -1,0 +1,5 @@
+Options +FollowSymlinks
+RewriteEngine on
+RewriteOptions Inherit
+
+RewriteRule ^(.+)$  index.php?q=/$1 [L,QSA]

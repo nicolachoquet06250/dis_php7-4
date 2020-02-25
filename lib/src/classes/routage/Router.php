@@ -69,9 +69,11 @@ class Router {
                     }
                     $doc = $doc_tmp;
                     $http_method = isset($doc['http']) ? $doc['http'] : 'get';
-                    $this->{$http_method}($doc['route'], function (Request $req, Response $res) use ($object, $method) {
-                        return $object->{$method->getName()}($req, $res);
-                    }, $group_route);
+                    if(!is_null($doc['route'])) {
+                        $this->{$http_method}($doc['route'], function (Request $req, Response $res) use ($object, $method) {
+                            return $object->{$method->getName()}($req, $res);
+                        }, $group_route);
+                    }
                 }
             }
         }
@@ -136,24 +138,37 @@ class Router {
         return $uri_params;
     }
 
-    private function extract_get_params($uri) {
+    private function extract_get_params($uri, $query_string) {
+        if(!strstr($uri, '?')) {
+            $query_string = str_replace('q=/index.php&q=', '', $query_string);
+            $esperluet_position = strpos($query_string, '&');
+            if($esperluet_position) {
+                $query_string = substr($query_string, 0, $esperluet_position) . '?' . substr($query_string, $esperluet_position + 1, strlen($query_string));
+            }
+            $uri = $query_string;
+        }
+
         $_uri = explode('?', $uri);
         if(count($_uri) > 0) {
             $this->uri = $_uri[0];
-            $queryString = $_uri[1];
-            $queryStringArray = explode('&', $queryString);
-            $tmp = [];
-            foreach ($queryStringArray as $value) {
-                $_ = explode('=', $value);
-                $tmp[$_[0]] = $this->cast(urldecode($_[1]));
-            }
-            $this->get = $tmp;
+            $query_string = $_uri[1];
+        } else {
+            $this->uri = $uri;
+            $query_string = '';
         }
+
+        $query_string_array = explode('&', $query_string);
+        $tmp = [];
+        foreach ($query_string_array as $value) {
+            $_ = explode('=', $value);
+            $tmp[$_[0]] = $this->cast(urldecode($_[1]));
+        }
+        $this->get = $tmp;
     }
 
     private function get_uri() {
         if(empty($this->get)) {
-            $this->extract_get_params($_SERVER['REQUEST_URI']);
+            $this->extract_get_params($_SERVER['REQUEST_URI'], $_SERVER['QUERY_STRING']);
         }
         return $this->uri;
     }

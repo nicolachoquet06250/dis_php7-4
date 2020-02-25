@@ -18,6 +18,13 @@ Application::context(Application::CONTEXT_API);
 $router = $router = Router::create();
 
 try {
+    if(isset($_GET['q'])) {
+        if(substr($_GET['q'], 0, strlen('/'.dirname(__DIR__))) === '/'.dirname(__DIR__)) {
+            $_GET['q'] = str_replace('/'.dirname(__DIR__), '', $_GET['q']);
+        }
+        $_SERVER['REQUEST_URI'] = $_GET['q'];
+        unset($_GET['q']);
+    }
     $router ->get('/', fn (Request $req, Response $res) =>
                 $res->json(['status' => 'HOME']))
             ->get('/test/:toto/:tata', fn (Request $req, Response $res) =>

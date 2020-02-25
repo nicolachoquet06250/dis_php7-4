@@ -43,4 +43,15 @@ class Test extends Controller {
             'get[test] => ' => $req->get('test')
         ]);
     }
+
+    /**
+     * @param Request $req
+     * @param Response $res
+     * @return string
+     *
+     * @route /montest/test.html
+     */
+    public function test(Request $req, Response $res): string {
+        return $res->html('<b>Test</b>');
+    }
 }

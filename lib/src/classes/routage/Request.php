@@ -1,6 +1,5 @@
 <?php
 
-
 namespace classes\routage;
 
 class Request {

@@ -1,19 +1,17 @@
 <?php
 
-
 namespace app\classes\controllers;
 
 use classes\mvc\Controller;
 use classes\routage\Request;
 use classes\routage\Response;
+use app\classes\services\Test3;
+use traits\DIS;
 
 class Test extends Controller {
-    public ?\classes\services\Test $test = null;
-    private ?\classes\services\Test $test2 = null;
+    use DIS;
 
-    public function __construct(\classes\services\Test $test) {
-        $this->test2 = $test;
-    }
+    private ?Test3 $test3 = null;
 
     /**
      * @param Request $req
@@ -23,12 +21,11 @@ class Test extends Controller {
      * @http get
      * @route /:lol
      */
-    public function toto(Request $req, Response $res): string {
-        ob_start();
-        var_dump($req, $res, 'param lol => ', $req->param('lol'), 'get[test] => ', $req->get('test'));
-        $var_dump = ob_get_contents();
-        ob_clean();
-        return $res->html('<pre>'.$var_dump.'</pre>');
+    public function toto(Request $req, Response $res): void {
+        echo '<pre>';
+        var_dump($req, $res, 'param lol => ', $req->param('lol'), 'get[test] => ', $req->get('test'), '$this->test3->toto()');
+        $this->test3->toto();
+        echo '</pre>';
     }
 
     /**

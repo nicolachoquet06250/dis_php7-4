@@ -1,15 +1,14 @@
 <?php
 
-
 namespace classes\routage;
 
-use classes\abstracts\Singleton;
 use classes\Application;
 use classes\mvc\Controller;
 use Exception;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionObject;
+use traits\Singleton;
 
 /**
  * Class Router
@@ -22,7 +21,9 @@ use ReflectionObject;
  * @method Router put(string $route, callable $callback, string $group_route = '')
  * @method Router delete(string $route, callable $callback, string $group_route = '')
  */
-class Router extends Singleton {
+class Router {
+    use Singleton;
+
     private array $routes = [];
     private array $available_http_methods = ['get', 'post', 'put', 'delete'];
     private string $uri = '';
@@ -47,54 +48,6 @@ class Router extends Singleton {
         else throw new Exception(__CLASS__.'::'.$name.'() method not found !!');
     }
 
-    /**
-     * @param ReflectionClass $classRef
-     * @return array
-     * @throws ReflectionException
-     */
-    private function create_params_to_inject_in_construct(ReflectionClass $classRef): array {
-        $construct = $classRef->getConstructor();
-        if(!is_null($construct)) {
-            $construct_params = $construct->getParameters();
-            $params = [];
-            foreach ($construct_params as $construct_param) {
-                $paramClass = $construct_param->getClass()->getName();
-                $parent = (new ReflectionClass($paramClass))->getParentClass();
-                if($parent && $parent->getName() === Singleton::class) {
-                    $params[] = $paramClass::create();
-                } else {
-                    $params[] = new $paramClass();
-                }
-            }
-            return $params;
-        }
-        return [];
-    }
-
-    /**
-     * @param ReflectionClass $classRef
-     * @return Controller
-     * @throws ReflectionException
-     */
-    private function inject_into_object_properties(ReflectionClass $classRef) {
-        /** @var Controller $object */
-        $object = $classRef->newInstanceWithoutConstructor();
-
-        foreach ($classRef->getProperties() as $property) {
-            if($property->isPublic()) {
-                $_class = $property->getType()->getName();
-                $parent = (new ReflectionClass($_class))->getParentClass();
-                if($parent && $parent->getName() === Singleton::class) {
-                    $object->{$property->getName()} = $_class::create();
-                } else {
-                    $object->{$property->getName()} = new $_class();
-                }
-            }
-        }
-        $object->__construct(...$this->create_params_to_inject_in_construct($classRef));
-        return $object;
-    }
-
     private function add_methods_into_routes(ReflectionObject $objectRef, $object, string $group_route) {
         $methods = $objectRef->getMethods();
         foreach ($methods as $method) {
@@ -111,9 +64,7 @@ class Router extends Singleton {
                                 $doc_tmp[$matches['key']] = [];
                                 $doc_tmp[$matches['key']][] = $old_val;
                                 $doc_tmp[$matches['key']][] = trim($matches['value']);
-                            } elseif (!isset($doc_tmp[$matches['key']])) {
-                                $doc_tmp[$matches['key']] = trim($matches['value']);
-                            }
+                            } elseif (!isset($doc_tmp[$matches['key']])) $doc_tmp[$matches['key']] = trim($matches['value']);
                         }
                     }
                     $doc = $doc_tmp;
@@ -128,16 +79,20 @@ class Router extends Singleton {
 
     /**
      * @param string $route
-     * @param $callback
+     * @param callable|Controller $callback
      * @return Router
      * @throws ReflectionException
      */
     public function group(string $route, $callback): Router {
-        if(is_callable($callback)) {
-            $callback($this, $route);
-        } else {
+        if(is_callable($callback)) $callback($this, $route);
+        else {
             $refClass = new ReflectionClass($callback);
-            $object = $this->inject_into_object_properties($refClass);
+
+            if($refClass->hasMethod('init')) $object = $callback::init();
+            elseif ($refClass->hasMethod('create')) $object = $callback::create();
+            else $object = new $callback();
+
+            /** @var Controller $object */
             $object->group_route($route);
             $this->add_methods_into_routes(new ReflectionObject($object), $object, $route);
         }

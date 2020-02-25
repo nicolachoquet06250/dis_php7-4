@@ -1,11 +1,9 @@
 <?php
 
-
 namespace classes;
 
-
-use classes\abstracts\Singleton;
 use classes\routage\Router;
+use traits\Singleton;
 
 /**
  * Class Application
@@ -13,7 +11,9 @@ use classes\routage\Router;
  *
  * @method static Application create(...$params)
  */
-class Application extends Singleton {
+class Application {
+    use Singleton;
+
     private array $objects_to_start = [];
     private static string $context = self::CONTEXT_API;
     const CONTEXT_API = 'api';

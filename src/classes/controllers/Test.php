@@ -52,6 +52,40 @@ class Test extends Controller {
      * @route /montest/test.html
      */
     public function test(Request $req, Response $res): string {
-        return $res->html('<b>Test</b>');
+        return $res->html('
+<script>
+        function post(element) {
+            fetch("/toto/toto/tata", {
+                method: "post",
+                headers: {
+                    "Content-Type": element.getAttribute("data-type")
+                },
+                body: element.getAttribute("data-send")
+            }).then(r => r.text())
+            .then(html => {
+                document.querySelector("div").innerHTML = html;
+            })
+        }
+</script>
+<button onclick="post(this)" data-type="application/json" data-send=\'{"coucou": "Nico"}\'>POST JSON</button>
+<button onclick="post(this)" data-type="text/html" data-send="<html><title>coucou</title><b>test d\'envois HTML</b></html>">POST HTML</button>
+<p>Retour: </p>
+<div>
+    <b>Rien</b>
+</div>');
+    }
+
+    /**
+     * @param Request $req
+     * @param Response $res
+     * @return string
+     *
+     * @http post
+     * @route /toto/tata
+     */
+    public function titi(Request $req, Response $res): string {
+        if(!is_null($req->post('html')))
+            return $res->html($req->post('html'));
+        return $res->json($req->post());
     }
 }

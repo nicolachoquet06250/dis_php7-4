@@ -187,6 +187,11 @@ class Router {
                     $request = new Request();
                     $request->params($this->parse_params($matches));
                     foreach ($this->get as $k => $v) $request->get($k, $v);
+                    foreach ($_POST as $k => $v) $request->post($k, $v);
+                    $post_body = file_get_contents('php://input');
+                    if(!is_null($json_post_body = json_decode($post_body, true)))
+                        foreach ($json_post_body as $k => $v) $request->post($k, $v);
+                    else $request->post('html', $post_body);
                     $response = new Response();
 
                     return $route['callback']($request, $response);

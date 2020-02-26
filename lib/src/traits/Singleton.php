@@ -9,9 +9,8 @@ trait Singleton {
     private function __construct(...$params) {}
 
     public static function create(...$params): self {
-        $class = self::class;
         if(is_null(self::$instance)) {
-            self::$instance = new $class(...$params);
+            self::$instance = new self(...$params);
         }
         return self::$instance;
     }

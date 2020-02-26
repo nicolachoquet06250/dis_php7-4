@@ -14,3 +14,7 @@ package-lock.json
 
 /logs
 /logs/**
+
+index.php
+cmd.php
+.htaccess

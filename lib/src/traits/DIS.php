@@ -8,52 +8,14 @@ use ReflectionParameter;
 use ReflectionProperty;
 
 trait DIS {
-    private array $primary_type_array = [
-        'string',
-        'array',
-        'int',
-        'float',
-        'object',
-        'bool',
-    ];
+    use Instantiator;
+    use ParamsInstantiator;
+    use ProptertiesInstantiator;
+
     private static bool $is_init = false;
 
     private final function is_singleton(ReflectionClass $classObject) {
         return $classObject->hasMethod('create');
-    }
-
-    private final function instantiate_properties(ReflectionProperty $property): void {
-        $_class = $property->getType()->getName();
-        if (!in_array($_class, $this->primary_type_array)) {
-            $propertyClass = new ReflectionClass($_class);
-            $className = $propertyClass->getName();
-
-            if ($propertyClass->hasMethod('init')) $this->{$property->getName()} = $className::init();
-            elseif ($propertyClass->hasMethod('create')) $this->{$property->getName()} = $className::create();
-            else $this->{$property->getName()} = new $className();
-        }
-    }
-
-    private final function instantiate_params(ReflectionParameter $parameter, array &$params): void {
-        $paramClass = $parameter->getClass()->getName();
-
-        if($parameter->getClass()->hasMethod('init')) $params[] = $paramClass::init();
-        elseif ($parameter->getClass()->hasMethod('create')) $params[] = $paramClass::create();
-        else $params[] = new $paramClass();
-    }
-
-    /**
-     * @param ReflectionProperty|ReflectionParameter $object
-     * @param string $type
-     * @param array $params
-     * @param bool $static
-     */
-    private final function instantiate($object, string $type = 'properties', array &$params = [], $static = false) {
-        if(gettype($object) === 'object') {
-            if(in_array('instantiate_'.$type, get_class_methods(self::class))) {
-                $static ? self::{'instantiate_'.$type}($object, $params) : $this->{'instantiate_'.$type}($object, $params);
-            }
-        }
     }
 
     /**

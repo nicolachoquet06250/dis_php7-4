@@ -3,6 +3,7 @@
 namespace classes;
 
 use classes\routage\Router;
+use traits\Runner;
 use traits\Singleton;
 
 /**
@@ -13,6 +14,7 @@ use traits\Singleton;
  */
 class Application {
     use Singleton;
+    use Runner;
 
     private array $objects_to_start = [];
     private static string $context = self::CONTEXT_API;
@@ -27,7 +29,7 @@ class Application {
         return $this;
     }
 
-    public function run() {
+    public function run(): void {
         foreach ($this->objects_to_start as $object) {
             if(get_class($object['object']) === Router::class) {
                 echo $object['object']->{$object['start_method']}();

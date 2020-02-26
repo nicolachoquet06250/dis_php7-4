@@ -4,6 +4,7 @@
     "type": "project",
     "autoload": {
         "psr-4": {
+            "main\\": "lib/src/main",
             "classes\\": "lib/src/classes",
             "interfaces\\": "lib/src/interfaces",
             "traits\\": "lib/src/traits",
@@ -18,5 +19,14 @@
         }
     ],
     "minimum-stability": "dev",
+    "scripts": {
+        "post-autoload-dump": [
+            "php lib/scripts/generate_cmd.php",
+            "php cmd.php generate:index -p context=api",
+            "php cmd.php generate:htaccess",
+            "php src/scripts/custom_index.php",
+            "php src/scripts/custom_cmd.php"
+        ]
+    },
     "require": {}
 }

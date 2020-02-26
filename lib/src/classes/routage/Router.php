@@ -8,6 +8,8 @@ use Exception;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionObject;
+use traits\Instantiator;
+use traits\ObjectInstantiator;
 use traits\Singleton;
 
 /**
@@ -23,6 +25,8 @@ use traits\Singleton;
  */
 class Router {
     use Singleton;
+    use Instantiator;
+    use ObjectInstantiator;
 
     private array $routes = [];
     private array $available_http_methods = ['get', 'post', 'put', 'delete'];
@@ -79,14 +83,6 @@ class Router {
         }
     }
 
-    private function instantiate(ReflectionClass $refClass, $callback) {
-        if($refClass->hasMethod('init')) $object = $callback::init();
-        elseif ($refClass->hasMethod('create')) $object = $callback::create();
-        else $object = new $callback();
-
-        return $object;
-    }
-
     /**
      * @param string $route
      * @param callable|Controller $callback
@@ -97,7 +93,7 @@ class Router {
         if(is_callable($callback)) $callback($this, $route);
         else {
             $refClass = new ReflectionClass($callback);
-            $object = $this->instantiate($refClass, $callback);
+            $object = $this->instantiate($refClass, 'object', $callback);
             /** @var Controller $object */
             $object->group_route($route);
             $this->add_methods_into_routes(new ReflectionObject($object), $object, $route);
@@ -203,5 +199,14 @@ class Router {
         }
         $error = (new Response())->error(404);
         return Application::context() === Application::CONTEXT_API ? $error->json() : $error->html();
+    }
+
+    public function parse_q_param() {
+        if(isset($_GET['q'])) {
+            if(substr($_GET['q'], 0, strlen('/'.dirname(__DIR__))) === '/'.dirname(__DIR__))
+                $_GET['q'] = str_replace('/'.dirname(__DIR__), '', $_GET['q']);
+            $_SERVER['REQUEST_URI'] = $_GET['q'];
+            unset($_GET['q']);
+        }
     }
 }

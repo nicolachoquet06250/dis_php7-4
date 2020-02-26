@@ -7,6 +7,7 @@ class Register {
     private static array $base_commands = [
         'help' => Help::class,
         'generate' => Generate::class,
+        'count' => Count::class,
     ];
     protected static array $commands = [];
 

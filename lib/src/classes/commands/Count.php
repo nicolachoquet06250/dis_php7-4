@@ -14,8 +14,8 @@ class Count {
 
     private ?Platform $platformHelper = null;
 
-    const CLASSES = 0;
     const LINES = 1;
+    const CLASSES = 0;
 
     protected array $directories = [
         __DIR__.'/../../../src',
@@ -24,10 +24,10 @@ class Count {
 
     protected function read_dir(string $directory, int &$n, int $type): void {
         $dir = opendir($directory);
-        while (($elem = readdir($dir)) !== false) {
-            if($elem !== '.' && $elem !== '..') {
+        while (($elem = readdir($dir)) !== false)
+            if($elem !== '.' && $elem !== '..'):
                 if (is_file($directory . '/' . $elem))
-                    switch($type === self::CLASSES) {
+                    switch($type) {
                         case self::CLASSES:
                             $n++;
                             break;
@@ -39,8 +39,7 @@ class Count {
                             break;
                     }
                 else $this->read_dir($directory . '/' . $elem, $n, $type);
-            }
-        }
+            endif;
     }
 
     public function number_of_classes() {

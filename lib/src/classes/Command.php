@@ -36,7 +36,7 @@ class Command {
         $command = explode(':', $command);
         $command = [
             'command' => $command[0],
-            'method'  => $command[1],
+            'method'  => $command[1] ?? 'help',
         ];
         if(count($argv) > 0) {
             $params_delimiter = array_shift($argv);

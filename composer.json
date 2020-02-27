@@ -7,8 +7,7 @@
             "main\\": "lib/src/main",
             "classes\\": "lib/src/classes",
             "interfaces\\": "lib/src/interfaces",
-            "traits\\": "lib/src/traits",
-            "app\\": "src"
+            "traits\\": "lib/src/traits"
         }
     },
     "license": "MIT",

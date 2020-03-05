@@ -16,7 +16,8 @@ class Generate {
      * @param string $content
      * @param string $path
      */
-    public function index(string $content = '', string $path = __DIR__.'/../../../../index.php') {
+    public function index(string $content = '') {
+        $path = __DIR__.(strstr(__DIR__, 'vendor') ? '/../../../../../../../..' : '/../../../..').'/index.php';
         if($content !== '') unlink($path);
         if(!file_exists($path)) {
             if($content === '') {
@@ -56,7 +57,8 @@ try {
      * @param string $content
      * @param string $path
      */
-    public function cmd(string $content = '', string $path = __DIR__.'/../../../../cmd.php') {
+    public function cmd(string $content = '') {
+        $path = __DIR__.(strstr(__DIR__, 'vendor') ? '/../../../../../../../..' : '/../../../..').'/index.php';
         if($content !== '') unlink($path);
         if(!file_exists($path)) {
             if($content === '') {

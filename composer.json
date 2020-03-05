@@ -20,9 +20,7 @@
     "minimum-stability": "stable",
     "scripts": {
         "post-autoload-dump": [
-            "cd $PWD;php $PWD/lib/scripts/generate_cmd.php",
-            "cd $PWD;php cmd.php generate:index -p context=api",
-            "cd $PWD;php cmd.php generate:htaccess"
+            "cd $PWD;php $PWD/lib/scripts/generate_files.php"
         ]
     },
     "require": {}

@@ -14,7 +14,6 @@ class Generate {
 
     /**
      * @param string $content
-     * @param string $path
      */
     public function index(string $content = '') {
         $path = __DIR__.(strstr(__DIR__, 'vendor') ? '/../../../../../../..' : '/../../../..').'/index.php';
@@ -55,10 +54,9 @@ try {
 
     /**
      * @param string $content
-     * @param string $path
      */
     public function cmd(string $content = '') {
-        $path = __DIR__.(strstr(__DIR__, 'vendor') ? '/../../../../../../../..' : '/../../../..').'/cmd.php';
+        $path = __DIR__.(strstr(__DIR__, 'vendor') ? '/../../../../../../..' : '/../../../..').'/cmd.php';
         if($content !== '') unlink($path);
         if(!file_exists($path)) {
             if($content === '') {
@@ -76,10 +74,10 @@ Main::main($argv, $argc);
     }
 
     /**
-     * @throws Exception
+     * @param string $content
      */
-    public function htaccess() {
-        $path = __DIR__.'/../../../../.htaccess';
+    public function htaccess(string $content = '') {
+        $path = __DIR__.(strstr(__DIR__, 'vendor') ? '/../../../../../../..' : '/../../../..').'/.htaccess';
         if(!file_exists($path)) {
             file_put_contents($path, 'Options +FollowSymlinks
 RewriteEngine on

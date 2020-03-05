@@ -17,7 +17,7 @@ class Generate {
      * @param string $path
      */
     public function index(string $content = '') {
-        $path = __DIR__.(strstr(__DIR__, 'vendor') ? '/../../../../../../../..' : '/../../../..').'/index.php';
+        $path = __DIR__.(strstr(__DIR__, 'vendor') ? '/../../../../../../..' : '/../../../..').'/index.php';
         if($content !== '') unlink($path);
         if(!file_exists($path)) {
             if($content === '') {

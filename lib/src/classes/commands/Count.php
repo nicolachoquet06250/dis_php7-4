@@ -65,7 +65,7 @@ class Count {
 
         foreach ($dirs as $dir => $mode) $this->read_dir($dir, $n, $mode);
 
-        echo $n." sources".($n > 1 ? 'es' : '')." found !\n";
+        echo $n." source".($n > 1 ? 's' : '')." found !\n";
     }
 
     public function classes() {

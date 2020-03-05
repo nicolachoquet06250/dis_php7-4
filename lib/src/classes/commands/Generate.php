@@ -4,7 +4,6 @@
 namespace classes\commands;
 
 
-use Exception;
 use traits\Command;
 
 class Generate {
@@ -49,7 +48,7 @@ try {
 ';
             }
             file_put_contents($path, $content);
-        } else echo $path." already exists\n";
+        } else echo realpath($path)." already exists\n";
     }
 
     /**
@@ -70,7 +69,7 @@ Main::main($argv, $argc);
 ';
             }
             file_put_contents($path, $content);
-        } else echo $path." already exists\n";
+        } else echo realpath($path)." already exists\n";
     }
 
     /**
@@ -85,7 +84,7 @@ RewriteOptions Inherit
 
 RewriteRule ^(.+)$  index.php?q=/$1 [L,QSA]
 ');
-        } else echo $path." already exists\n";
+        } else echo realpath($path)." already exists\n";
     }
 
     public function help() {

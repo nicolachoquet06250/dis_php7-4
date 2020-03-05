@@ -23,5 +23,7 @@
             "cd $PWD;php $PWD/lib/scripts/generate_files.php"
         ]
     },
-    "require": {}
+    "require": {
+        "php": "^7.4"
+    }
 }

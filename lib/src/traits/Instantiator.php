@@ -9,6 +9,14 @@ use ReflectionParameter;
 use ReflectionProperty;
 
 trait Instantiator {
+	private static array $primary_type_array = [
+		'string',
+		'array',
+		'int',
+		'float',
+		'object',
+		'bool',
+	];
     /**
      * @param ReflectionProperty|ReflectionParameter|ReflectionClass $object
      * @param string $type

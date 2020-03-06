@@ -180,6 +180,7 @@ class Router {
             $final_route_regex = '/'.str_replace(['/', '\\\\/'], '\/', preg_replace('/(\:([a-z]+))/sD', '(?<$2>[^\\:\\/]+)', $route['route'])).'$/sDA';
 
             $uri = $this->get_uri();
+            $nb_same_urls_with_not_same_method = 0;
             if((bool)preg_match($final_route_regex, $uri, $matches)) {
                 if($this->http_method() === strtoupper($route['http_method'])) {
                     $request = new Request();
@@ -193,11 +194,13 @@ class Router {
                     $response = new Response();
 
                     return $route['callback']($request, $response);
-                } else {
-                    $error = (new Response())->error(405);
-                    return Application::context() === Application::CONTEXT_API ? $error->json() : $error->html();
-                }
+                } else $nb_same_urls_with_not_same_method++;
             }
+        }
+        $nb_same_urls_with_not_same_method = $nb_same_urls_with_not_same_method ?? 0;
+        if($nb_same_urls_with_not_same_method > 0) {
+            $error = (new Response())->error(405);
+            return Application::context() === Application::CONTEXT_API ? $error->json() : $error->html();
         }
         $error = (new Response())->error(404);
         return Application::context() === Application::CONTEXT_API ? $error->json() : $error->html();

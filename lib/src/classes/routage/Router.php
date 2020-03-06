@@ -206,6 +206,9 @@ class Router {
             if(substr($_GET['q'], 0, strlen('/'.dirname(__DIR__))) === '/'.dirname(__DIR__))
                 $_GET['q'] = str_replace('/'.dirname(__DIR__), '', $_GET['q']);
             $_SERVER['REQUEST_URI'] = $_GET['q'];
+            if($_SERVER['REQUEST_URI'] === '/index.php') {
+                $_SERVER['REQUEST_URI'] = '/';
+            }
             unset($_GET['q']);
         }
     }

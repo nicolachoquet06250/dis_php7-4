@@ -74,6 +74,7 @@ class Router {
                     $doc = $doc_tmp;
                     $http_method = isset($doc['http']) ? $doc['http'] : 'get';
                     if(!is_null($doc['route'])) {
+                        if($doc['route'] === '/') $doc['route'] = '';
                         $this->{$http_method}($doc['route'], function (Request $req, Response $res) use ($object, $method) {
                             return $object->{$method->getName()}($req, $res);
                         }, $group_route);

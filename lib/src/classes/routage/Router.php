@@ -138,7 +138,9 @@ class Router {
     private function extract_get_params($uri, $query_string) {
         if(!strstr($uri, '?')) {
             $query_string = str_replace('q=/index.php&q=', '', $query_string);
-            if($query_string === 'q=/index.php') $query_string = '/';
+            if($query_string === 'q=/index.php') {
+                $query_string = '/';
+            }
             $esperluet_position = strpos($query_string, '&');
             if($esperluet_position) {
                 $query_string = substr($query_string, 0, $esperluet_position) . '?' . substr($query_string, $esperluet_position + 1, strlen($query_string));

@@ -54,4 +54,8 @@ class Request {
         }
         return null;
     }
+
+    public function header(string $key = '') {
+        return $key !== '' && getallheaders() && getallheaders()[$key] ? getallheaders()[$key] : null;
+    }
 }

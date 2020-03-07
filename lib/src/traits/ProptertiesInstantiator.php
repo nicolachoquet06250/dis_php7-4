@@ -9,6 +9,28 @@ use ReflectionException;
 use ReflectionProperty;
 
 trait ProptertiesInstantiator {
+	private static final function instantiate_static_properties(ReflectionProperty $property, ReflectionClass $propertyClass): void {
+		$className = $propertyClass->getName();
+		if ( $propertyClass->hasMethod( 'init' ) ) {
+			static::${$property->getName()} = $className::init();
+		} elseif ( $propertyClass->hasMethod( 'create' ) ) {
+			static::${$property->getName()} = $className::create();
+		} else {
+			static::${$property->getName()} = new $className();
+		}
+	}
+
+	private final function instantiate_non_static_properties(ReflectionProperty $property, ReflectionClass $propertyClass) {
+		$className = $propertyClass->getName();
+		if ( $propertyClass->hasMethod( 'init' ) ) {
+			$this->{$property->getName()} = $className::init();
+		} elseif ( $propertyClass->hasMethod( 'create' ) ) {
+			$this->{$property->getName()} = $className::create();
+		} else {
+			$this->{$property->getName()} = new $className();
+		}
+	}
+
 	/**
 	 * @param ReflectionProperty $property
 	 * @throws ReflectionException
@@ -19,23 +41,8 @@ trait ProptertiesInstantiator {
 			$propertyClass = new ReflectionClass($_class);
 			$className = $propertyClass->getName();
 
-			if($property->isStatic()) {
-				if ( $propertyClass->hasMethod( 'init' ) ) {
-					static::${$property->getName()} = $className::init();
-				} elseif ( $propertyClass->hasMethod( 'create' ) ) {
-					static::${$property->getName()} = $className::create();
-				} else {
-					static::${$property->getName()} = new $className();
-				}
-			} else {
-				if ( $propertyClass->hasMethod( 'init' ) ) {
-					$this->{$property->getName()} = $className::init();
-				} elseif ( $propertyClass->hasMethod( 'create' ) ) {
-					$this->{$property->getName()} = $className::create();
-				} else {
-					$this->{$property->getName()} = new $className();
-				}
-			}
+			if($property->isStatic()) static::instantiate_static_properties($property, $propertyClass);
+			else $this->instantiate_non_static_properties($property, $propertyClass);
 		}
 	}
 }

@@ -68,7 +68,7 @@ class Command {
      * @throws Exception
      */
     function run(): void {
-        static::$register::init();
+        static::$register::init_register();
         $cmd = static::$register::command($this->command['command']);
         /** @var \traits\Command $command */
         $command = $this->instantiate(new ReflectionClass($cmd), 'object', $cmd);

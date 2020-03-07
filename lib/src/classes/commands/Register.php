@@ -11,7 +11,7 @@ class Register {
     ];
     protected static array $commands = [];
 
-    static final function init(): void {
+    static final function init_register(): void {
         $_commands = [];
         foreach (static::$base_commands as $k => $v) $_commands[$k] = $v;
         foreach (static::$commands as $k => $v) $_commands[$k] = $v;

@@ -1,8 +1,8 @@
 <?php
 
-namespace main;
+namespace dis\core\main;
 
-use classes\Command;
+use dis\core\classes\Command;
 use Exception;
 
 class Main {

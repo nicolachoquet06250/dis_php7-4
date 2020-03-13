@@ -1,6 +1,6 @@
 <?php
 
-use main\Main;
+use dis\core\main\Main;
 
 require_once __DIR__.'/../../vendor/autoload.php';
 

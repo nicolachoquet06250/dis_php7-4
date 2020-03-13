@@ -1,7 +1,7 @@
 <?php
 
 
-namespace traits;
+namespace dis\core\traits;
 
 use ReflectionParameter;
 

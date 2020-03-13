@@ -1,14 +1,14 @@
 <?php
 
-namespace classes;
+namespace dis\core\classes;
 
-use classes\routage\Router;
+use dis\core\classes\routage\Router;
 use traits\Runner;
 use traits\Singleton;
 
 /**
  * Class Application
- * @package classes
+ * @package dis\core\classes
  *
  * @method static Application create(...$params)
  */

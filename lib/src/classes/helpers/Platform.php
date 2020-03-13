@@ -1,7 +1,7 @@
 <?php
 
 
-namespace classes\helpers;
+namespace dis\core\classes\helpers;
 
 
 class Platform {

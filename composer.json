@@ -4,10 +4,7 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "main\\": "lib/src/main",
-            "classes\\": "lib/src/classes",
-            "interfaces\\": "lib/src/interfaces",
-            "traits\\": "lib/src/traits"
+            "dis\\core": "lib/src"
         }
     },
     "license": "MIT",

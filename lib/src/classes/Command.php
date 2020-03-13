@@ -1,7 +1,7 @@
 <?php
 
 
-namespace classes;
+namespace dis\core\classes;
 
 
 use Exception;
@@ -13,7 +13,7 @@ use traits\DummySingleton as Singleton;
 
 /**
  * Class Command
- * @package classes
+ * @package dis\core\classes
  *
  * @method static Command create(array $argv, int $argc)
  */

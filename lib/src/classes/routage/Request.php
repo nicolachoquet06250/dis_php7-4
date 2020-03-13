@@ -1,6 +1,6 @@
 <?php
 
-namespace classes\routage;
+namespace dis\core\classes\routage;
 
 class Request {
     private array $params = [];

@@ -1,12 +1,12 @@
 <?php
 
 
-namespace classes\commands;
+namespace dis\core\classes\commands;
 
 
-use classes\helpers\Platform;
-use traits\Command;
-use traits\DIS;
+use dis\core\classes\helpers\Platform;
+use dis\core\traits\Command;
+use dis\core\traits\DIS;
 
 class Count {
     use Command;

@@ -1,10 +1,10 @@
 <?php
 
 
-namespace classes\commands;
+namespace dis\core\classes\commands;
 
 
-use traits\Command;
+use dis\core\traits\Command;
 
 class Generate {
     use Command;
@@ -23,10 +23,10 @@ class Generate {
 
 namespace main;
 
-use classes\Application;
-use classes\routage\Request;
-use classes\routage\Response;
-use classes\routage\Router;
+use dis\core\classes\Application;
+use dis\core\classes\routage\Request;
+use dis\core\classes\routage\Response;
+use dis\core\classes\routage\Router;
 use ReflectionException;
 
 require_once __DIR__ . \'/vendor/autoload.php\';

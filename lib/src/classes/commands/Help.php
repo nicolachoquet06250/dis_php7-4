@@ -1,10 +1,10 @@
 <?php
 
 
-namespace classes\commands;
+namespace dis\core\classes\commands;
 
 
-use traits\Command;
+use dis\core\traits\Command;
 
 class Help {
     use Command;

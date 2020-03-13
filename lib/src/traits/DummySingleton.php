@@ -1,7 +1,7 @@
 <?php
 
 
-namespace traits;
+namespace dis\core\traits;
 
 trait DummySingleton {
     private function __construct(...$params) {}

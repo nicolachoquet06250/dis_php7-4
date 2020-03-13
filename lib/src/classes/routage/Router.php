@@ -1,20 +1,20 @@
 <?php
 
-namespace classes\routage;
+namespace dis\core\classes\routage;
 
-use classes\Application;
-use classes\mvc\Controller;
+use dis\core\classes\Application;
+use dis\core\classes\mvc\Controller;
 use Exception;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionObject;
-use traits\Instantiator;
-use traits\ObjectInstantiator;
-use traits\Singleton;
+use dis\core\traits\Instantiator;
+use dis\core\traits\ObjectInstantiator;
+use dis\core\traits\Singleton;
 
 /**
  * Class Router
- * @package classes\routage
+ * @package dis\core\classes\routage
  *
  * @method static Router create(...$params)
  *

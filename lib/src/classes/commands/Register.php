@@ -1,6 +1,6 @@
 <?php
 
-namespace classes\commands;
+namespace dis\core\classes\commands;
 
 class Register {
     private static bool $is_help = false;

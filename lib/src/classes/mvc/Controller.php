@@ -1,6 +1,6 @@
 <?php
 
-namespace classes\mvc;
+namespace dis\core\classes\mvc;
 
 
 class Controller {

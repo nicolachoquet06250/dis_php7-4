@@ -1,11 +1,9 @@
 <?php
 
-namespace traits;
+namespace dis\core\traits;
 
 use ReflectionClass;
 use ReflectionException;
-use ReflectionParameter;
-use ReflectionProperty;
 
 trait DIS {
     use Instantiator;

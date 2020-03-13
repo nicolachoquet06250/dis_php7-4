@@ -6,10 +6,10 @@ namespace dis\core\classes;
 
 use Exception;
 use ReflectionClass;
-use traits\Instantiator;
-use traits\ObjectInstantiator;
-use traits\Runner;
-use traits\DummySingleton as Singleton;
+use dis\core\traits\Instantiator;
+use dis\core\traits\ObjectInstantiator;
+use dis\core\traits\Runner;
+use dis\core\traits\DummySingleton as Singleton;
 
 /**
  * Class Command

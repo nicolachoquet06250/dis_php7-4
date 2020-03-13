@@ -4,6 +4,7 @@
 namespace dis\core\classes;
 
 
+use dis\core\classes\commands\Register;
 use Exception;
 use ReflectionClass;
 use dis\core\traits\Instantiator;
@@ -68,17 +69,16 @@ class Command {
      * @throws Exception
      */
     function run(): void {
-        static::$register::init_register();
-        $cmd = static::$register::command($this->command['command']);
-        /** @var \traits\Command $command */
+        /** @var Register $register */
+        $register = static::$register;
+        $register::init_register();
+        $cmd = $register::command($this->command['command']);
+        /** @var \dis\core\traits\Command $command */
         $command = $this->instantiate(new ReflectionClass($cmd), 'object', $cmd);
-        if(static::$register::is_help()) {
-            $command->set_method('help');
-        } else {
+        if($register::is_help()) $command->set_method('help');
+        else {
             $command->set_method($this->command['method']);
-            if(isset($this->command['params'])) {
-                $command->set_params($this->command['params']);
-            }
+            if(isset($this->command['params'])) $command->set_params($this->command['params']);
         }
         $command->run();
     }

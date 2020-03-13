@@ -63,6 +63,8 @@ try {
 
 namespace main;
 
+use dis\core\main\Main;
+
 require_once __DIR__ . \'/vendor/autoload.php\';
 
 Main::main($argv, $argc);

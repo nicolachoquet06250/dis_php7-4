@@ -14,6 +14,8 @@ class Register {
     public static function set_commands() {}
 
     public static final function init_register(): void {
+        static::set_commands();
+
         $_commands = [];
         foreach (static::$base_commands as $k => $v) $_commands[$k] = $v;
         foreach (static::$commands as $k => $v) $_commands[$k] = $v;
